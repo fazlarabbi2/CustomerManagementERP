@@ -1,0 +1,51 @@
+﻿@model IEnumerable<CustomerManagementERP.Models.CustomerDeliveryAddress>
+
+@{
+    ViewData["Title"] = "Customer Delivery Addresses";
+}
+
+<h1>Customer Delivery Addresses</h1>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Customer Name</th>
+            <th>Delivery Address</th>
+            <th>Contact Person</th>
+            <th>Contact Phone</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Customer?.Name</td>
+                <td>@item.DeliveryAddress</td>
+                <td>@item.ContactPerson</td>
+                <td>@item.ContactPhone</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.CustomerDeliveryAddressId" class="btn btn-info btn-sm">Details</a>
+                    <a asp-action="Edit" asp-route-id="@item.CustomerDeliveryAddressId" class="btn btn-warning btn-sm">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@item.CustomerDeliveryAddressId" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    Page: @ViewBag.Page of @((ViewBag.TotalItems + ViewBag.PageSize - 1) / ViewBag.PageSize)
+</div>
+
+<div>
+    @if (ViewBag.Page > 1)
+    {
+        <a asp-action="Index" asp-route-page="@(ViewBag.Page - 1)" class="btn btn-secondary">Previous</a>
+    }
+
+    @if (ViewBag.Page * ViewBag.PageSize < ViewBag.TotalItems)
+    {
+        <a asp-action="Index" asp-route-page="@(ViewBag.Page + 1)" class="btn btn-secondary">Next</a>
+    }
+</div>

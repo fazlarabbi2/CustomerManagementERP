@@ -1,0 +1,48 @@
+﻿@model IEnumerable<CustomerManagementERP.Models.Customer>
+
+@{
+    ViewData["Title"] = "Customer List";
+}
+
+@if(TempData["SuccessMessage"]!=null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<table class="table table-striped table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Phone</th>
+            <th>Credit Limit</th>
+            <th>Business Start Date</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach(var cus in Model)
+        {
+            <tr id="customerRow-@cus.CustomerId">  
+               <td>@cus.CustomerId</td>  
+               <td>@cus.Name</td>  
+               <td>@cus.Address</td>  
+               <td>@cus.Phone</td>  
+               <td>@cus.CreditLimit</td>
+                <td>@cus.BuisenesStartDate.ToShortDateString()</td>
+
+                <td asp-action="Details" asp-route-id="@cus.CustomerId" class="btn btn-info btn-sm">Details</td>
+                <td asp-action="Edit" asp-route-id="@cus.CustomerId" class="btn btn-info btn-sm">Edit</td>
+                <td asp-action="Delete" asp-route-id="@cus.CustomerId" class="btn btn-info btn-sm">Delete</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Create" class="btn btn-primary">Add New Books</a>
