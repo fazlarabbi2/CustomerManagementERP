@@ -32,29 +32,33 @@ namespace CustomerManagementERP.Controllers
 
 
 
+        // GET: Customer/Create
+        public IActionResult Create()
+        {
+            return View();
+        }
 
-        public async Task<IActionResult> Create(Customer customer)
+        // POST: Customer/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(Customer customer)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    // BookId and IsAvailable are not bound due to [BindNever]
                     _context.customers.Add(customer);
-                    await _context.SaveChangesAsync();
-
-                    TempData["SuccessMessage"] = $"Successfully added the book: {customer.Name}.";
-                    return RedirectToAction(nameof(Index));
+                    _context.SaveChanges();
+                    return RedirectToAction(nameof(Index)); // Redirect to a list page or another appropriate action
                 }
                 catch (Exception)
                 {
-                    TempData["ErrorMessage"] = "An error occurred while adding the book.";
-                    return View(customer);
+                    // Log the exception and show an error message if needed
+                    ModelState.AddModelError("", "Unable to save changes. Please try again.");
                 }
             }
             return View(customer);
         }
-
 
 
         //Get: Customers/Details/{{id}}
