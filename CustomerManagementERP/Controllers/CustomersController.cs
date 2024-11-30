@@ -31,7 +31,7 @@ namespace CustomerManagementERP.Controllers
         }
 
         //Get: Customers/Details/{{id}}
-        [HttpGet("id")]
+        //[HttpGet("id")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || id == 0)
