@@ -30,6 +30,33 @@ namespace CustomerManagementERP.Controllers
             }
         }
 
+
+
+
+        public async Task<IActionResult> Create(Customer customer)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    // BookId and IsAvailable are not bound due to [BindNever]
+                    _context.customers.Add(customer);
+                    await _context.SaveChangesAsync();
+
+                    TempData["SuccessMessage"] = $"Successfully added the book: {customer.Name}.";
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception)
+                {
+                    TempData["ErrorMessage"] = "An error occurred while adding the book.";
+                    return View(customer);
+                }
+            }
+            return View(customer);
+        }
+
+
+
         //Get: Customers/Details/{{id}}
         //[HttpGet("id")]
         public async Task<IActionResult> Details(int? id)
@@ -60,6 +87,26 @@ namespace CustomerManagementERP.Controllers
             }
         }
 
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var cus = await _context.customers
+                .AsNoTracking()
+                .FirstOrDefaultAsync(c => c.CustomerId == id);
+
+            if (cus == null)
+            {
+                TempData["ErrorMessage"] = $"No customer found with ID {id} for editing.";
+                return View("NotFound");
+            }
+
+            return View(cus);
+        }
+
         // Post: Customer/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -87,6 +134,7 @@ namespace CustomerManagementERP.Controllers
                     existCustomer.Address = customer.Address;
                     existCustomer.BuisenesStartDate = customer.BuisenesStartDate;
                     existCustomer.CreditLimit = customer.CreditLimit;
+                    existCustomer.Phone = customer.Phone;
 
                     await _context.SaveChangesAsync();
 
